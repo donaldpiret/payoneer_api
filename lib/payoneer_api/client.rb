@@ -6,7 +6,7 @@ module PayoneerApi
 
     def self.new_payee_link(partner_id, username, password, member_name)
       payoneer_api = self.new(partner_id, username, password)
-      payoneer_api.payee_link(member_name)
+      payoneer_api.payee_signup_url(member_name)
     end
 
     def self.transfer_funds(partner_id, username, password, options)
@@ -18,12 +18,12 @@ module PayoneerApi
       @partner_id, @username, @password = partner_id, username, password
     end
 
-    def payee_link(member_name)
+    def payee_signup_url(member_name)
       result = get_api_call(payee_link_args(payee_id: member_name))
       api_result(result)
     end
 
-    def payee_prefill_link(member_name, attributes = {})
+    def payee_prefilled_signup_url(member_name, attributes = {})
       result = post_api_call(payee_prefill_args(attributes.merge(payee_id: member_name)))
       api_result(result)
     end
