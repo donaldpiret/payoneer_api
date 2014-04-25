@@ -9,7 +9,5 @@ Gem::Specification.new do |s|
   s.files       = ['lib/payoneer_api/client.rb', 'lib/payoneer_api/payoneer_exception.rb']
   s.homepage    = 'https://github.com/roomorama/payoneer_api'
 
-  s.add_dependency 'nokogiri'
-
   s.add_development_dependency 'rspec'
 end
