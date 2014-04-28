@@ -91,7 +91,7 @@ module PayoneerApi
         p2: @password,
         p3: @partner_id,
         p4: args[:payee_id],
-        Xml: prefill_xml_data(args)
+        xml: prefill_xml_data(args)
       }
     end
 
