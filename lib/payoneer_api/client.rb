@@ -99,6 +99,8 @@ module PayoneerApi
       builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
         xml.PayoneerDetails do
           xml.Details do
+            xml.userName @username
+            xml.password @password
             xml.prid @partner_id
             xml.apuid args[:payee_id]
             xml.sessionid args[:session_id] if args[:session_id]
