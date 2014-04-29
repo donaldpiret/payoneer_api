@@ -86,7 +86,7 @@ module PayoneerApi
 
     def payee_prefill_args(args)
       {
-        mname: 'GetToken',
+        mname: 'GetTokenXML',
         p1: @username,
         p2: @password,
         p3: @partner_id,
