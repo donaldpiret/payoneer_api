@@ -17,6 +17,21 @@ describe PayoneerApi::Client do
   end
 
   describe '#payee_prefilled_signup_url', vcr: true do
+    context 'with incorrect login credentials' do
+      it 'returns a parsed error notification' do
+        client = PayoneerApi::Client.new(
+          partner_id: 'bogus',
+          username: 'bogus',
+          password: 'bogus',
+          environment: 'sandbox'
+        )
+        expect {
+          client.payee_prefilled_signup_url('1', {})
+        }.to raise_error(PayoneerApi::PayoneerException,
+          'Unauthorized Access or invalid parameters, please check your IP address and parameters.')
+      end
+    end
+
     context 'with all correct params passed in' do
       let(:params) {{
         redirect_url: 'http://test.com/redirect',

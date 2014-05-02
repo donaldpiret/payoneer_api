@@ -50,13 +50,11 @@ module PayoneerApi
     end
 
     def api_error_description(response)
-      return nil unless response and response.body
-      body_hash = Nokogiri::XML.parse(response.body)
-      if body_hash['PayoneerResponse']
-        return body_hash['PayoneerResponse']['Description']
-      else
-        return body_hash.to_s
-      end
+      return unless response and response.body
+      result = Nokogiri::XML.parse(response.body)
+      error_message = result.css('PayoneerResponse Description').first
+      return error_message if error_message
+      result.to_s
     end
 
     def get_api_call(args_hash)
@@ -136,11 +134,16 @@ module PayoneerApi
           end
         end
       end
-      builder.to_xml#.tap { |x| puts x.inspect }
+      builder.to_xml.tap { |x| puts x.to_s if sandbox? }
     end
 
     def api_url
-      @environment.to_s == 'production' ? PRODUCTION_API_URL : SANDBOX_API_URL
+      sandbox? ? SANDBOX_API_URL : PRODUCTION_API_URL
+    end
+
+    def sandbox?
+      return true unless @environment
+      @environment.to_s != 'production'
     end
   end
 end
