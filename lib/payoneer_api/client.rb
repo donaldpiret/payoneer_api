@@ -8,10 +8,6 @@ module PayoneerApi
       new(partner_id, username, password).payee_signup_url(member_name)
     end
 
-    # def self.transfer_funds(partner_id, username, password, options)
-    #   new(partner_id, username, password).transfer_funds(options)
-    # end
-
     def initialize(options = {})
       @partner_id, @username, @password = options[:partner_id], options[:username], options[:password]
       @environment = options[:environment]
@@ -30,11 +26,6 @@ module PayoneerApi
       response = post_api_call(payee_prefill_args(attributes.merge(payee_id: member_name)))
       xml_api_result(response)
     end
-
-    # def transfer_funds(options)
-    #   response = get_api_call(transfer_funds_args(options))
-    #   api_result(response)
-    # end
 
     private
 
@@ -144,21 +135,6 @@ module PayoneerApi
       end
       builder.to_xml#.tap { |x| puts x.inspect }
     end
-
-    # def transfer_funds_args(options)
-    #   {
-    #     mname: 'PerformPayoutPayment',
-    #     p1: options[:username],
-    #     p2: options[:password],
-    #     p3: options[:partner_id],
-    #     p4: options[:program_id],
-    #     p5: options[:internal_payment_id],
-    #     p6: options[:internal_payee_id],
-    #     p7: options[:amount],
-    #     p8: options[:description],
-    #     p9: options[:date]
-    #   }
-    # end
 
     def api_url
       @environment.to_s == 'production' ? PRODUCTION_API_URL : SANDBOX_API_URL
