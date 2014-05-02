@@ -1,19 +1,30 @@
-Gem::Specification.new do |s|
-  s.name        = 'payoneer_api'
-  s.version     = '0.0.1'
-  s.date        = '2014-05-02'
-  s.summary     = 'Ruby wrapper for Payoneer API'
-  s.description = 'Allows to easily generate the links for Pioneer registration'
-  s.authors     = ['Donald Piret']
-  s.email       = 'donald@donaldpiret.com'
-  s.files       = ['lib/payoneer_api/client.rb', 'lib/payoneer_api/payoneer_exception.rb']
-  s.homepage    = 'https://github.com/roomorama/payoneer_api'
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
-  s.add_dependency 'nokogiri'
+require 'payoneer_api/version'
 
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'vcr'
-  s.add_development_dependency 'webmock'
-  s.add_development_dependency 'dotenv'
-  s.add_development_dependency 'byebug'
+Gem::Specification.new do |spec|
+  spec.name = 'payoneer_api'
+  spec.version = PayoneerApi::Version
+  spec.date = '2014-05-02'
+  spec.description = %q(Ruby wrapper for Payoneer API)
+  spec.summary = spec.description
+  spec.authors = ['Donald Piret']
+  spec.email = %w[donald@donaldpiret.com]
+  spec.files = %w[README.md payoneer_api.gemspec]
+  spec.files += Dir.glob('lib/**/*.rb')
+  spec.files += Dir.glob('spec/**/*')
+  spec.licenses = %w[MIT]
+  spec.require_paths = %w[lib]
+  spec.required_rubygems_version = '>= 1.3.5'
+  spec.test_files = Dir.glob('spec/**/*')
+  spec.homepage    = 'https://github.com/donaldpiret/payoneer_api'
+
+  spec.add_dependency 'nokogiri'
+
+  spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'vcr'
+  spec.add_development_dependency 'webmock'
+  spec.add_development_dependency 'dotenv'
+  spec.add_development_dependency 'byebug'
 end
