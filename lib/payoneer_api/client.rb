@@ -4,12 +4,15 @@ module PayoneerApi
     PRODUCTION_API_URL = 'https://api.payoneer.com/payouts/HttpAPI/API.aspx?'
     API_PORT = '443'
 
-    def self.new_payee_link(partner_id, username, password, member_name)
-      new(partner_id, username, password).payee_signup_url(member_name)
+    def self.new_payee_link(member_name, options = {})
+      new(options).payee_signup_url(member_name)
     end
 
     def initialize(options = {})
       @partner_id, @username, @password = options[:partner_id], options[:username], options[:password]
+      @partner_id ||= ENV['PAYONEER_PARTNER_ID']
+      @username ||= ENV['PAYONEER_USERNAME']
+      @password ||= ENV['PAYONEER_PASSWORD']
       @environment = options[:environment]
       if @environment.nil? && defined?(Rails)
         Rails.env.production? ? 'production' : 'sandbox'
