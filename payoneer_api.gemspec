@@ -1,6 +1,5 @@
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-
 require 'payoneer_api/version'
 
 Gem::Specification.new do |spec|
@@ -20,11 +19,11 @@ Gem::Specification.new do |spec|
   spec.test_files = Dir.glob('spec/**/*')
   spec.homepage    = 'https://github.com/donaldpiret/payoneer_api'
 
-  spec.add_dependency 'nokogiri'
+  spec.add_dependency 'nokogiri', '~> 1.5'
 
-  spec.add_development_dependency 'rspec'
-  spec.add_development_dependency 'vcr'
-  spec.add_development_dependency 'webmock'
-  spec.add_development_dependency 'dotenv'
-  spec.add_development_dependency 'byebug'
+  spec.add_development_dependency 'rspec', '~> 2.14'
+  spec.add_development_dependency 'vcr', '~> 2.9'
+  spec.add_development_dependency 'webmock', '~> 1.17'
+  spec.add_development_dependency 'dotenv', '~> 0.11'
+  spec.add_development_dependency 'byebug', '~> 3.1'
 end
