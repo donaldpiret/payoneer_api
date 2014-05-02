@@ -9,6 +9,20 @@ describe PayoneerApi::Client do
     )
   }
 
+  describe '.new_payee_signup_url', vcr: true do
+    it 'returns a url to the registration page (implicit credentials through environment variables)' do
+      response = PayoneerApi::Client.new_payee_signup_url('1')
+      expect(URI.parse(response).host).to eq('payouts.sandbox.payoneer.com')
+    end
+  end
+
+  describe '.new_payee_prefilled_signup_url', vcr: true do
+    it 'returns a url to the prefilled registration page' do
+      response = PayoneerApi::Client.new_payee_prefilled_signup_url('1', {})
+      expect(URI.parse(response).host).to eq('payouts.sandbox.payoneer.com')
+    end
+  end
+
   describe '#payee_signup_url', vcr: true do
     it 'returns a url to the registration page' do
       response = client.payee_signup_url('1')

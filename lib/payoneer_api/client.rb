@@ -4,8 +4,13 @@ module PayoneerApi
     PRODUCTION_API_URL = 'https://api.payoneer.com/payouts/HttpAPI/API.aspx?'
     API_PORT = '443'
 
-    def self.new_payee_link(member_name, options = {})
+    def self.new_payee_signup_url(member_name, options = {})
       new(options).payee_signup_url(member_name)
+    end
+
+    def self.new_payee_prefilled_signup_url(member_name, options = {})
+      attributes = options.slice!(:partner_id, :username, :password)
+      new(options).payee_prefilled_signup_url(member_name, attributes)
     end
 
     def initialize(options = {})
@@ -14,6 +19,7 @@ module PayoneerApi
       @username ||= ENV['PAYONEER_USERNAME']
       @password ||= ENV['PAYONEER_PASSWORD']
       @environment = options[:environment]
+      @environment ||= ENV['PAYONEER_ENVIRONMENT']
       if @environment.nil? && defined?(Rails)
         Rails.env.production? ? 'production' : 'sandbox'
       end
@@ -134,7 +140,7 @@ module PayoneerApi
           end
         end
       end
-      builder.to_xml.tap { |x| puts x.to_s if sandbox? }
+      builder.to_xml#.tap { |x| puts x.to_s if sandbox? }
     end
 
     def api_url
