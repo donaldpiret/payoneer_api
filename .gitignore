@@ -1,4 +1,7 @@
 .env
-spec/fixtures/vcr_cassettes
 
 *.gem
+
+Gemfile.lock
+
+spec/fixtures/vcr_cassettes
