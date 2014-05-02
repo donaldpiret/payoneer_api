@@ -5,51 +5,64 @@ module PayoneerApi
     API_PORT = '443'
 
     def self.new_payee_link(partner_id, username, password, member_name)
-      payoneer_api = self.new(partner_id, username, password)
-      payoneer_api.payee_signup_url(member_name)
+      new(partner_id, username, password).payee_signup_url(member_name)
     end
 
-    def self.transfer_funds(partner_id, username, password, options)
-      payoneer_api = self.new(partner_id, username, password)
-      payoneer_api.transfer_funds(options)
-    end
+    # def self.transfer_funds(partner_id, username, password, options)
+    #   new(partner_id, username, password).transfer_funds(options)
+    # end
 
-    def initialize(partner_id, username, password)
-      @partner_id, @username, @password = partner_id, username, password
+    def initialize(options = {})
+      @partner_id, @username, @password = options[:partner_id], options[:username], options[:password]
+      @environment = options[:environment]
+      if @environment.nil? && defined?(Rails)
+        Rails.env.production? ? 'production' : 'sandbox'
+      end
+      @environment ||= 'sandbox'
     end
 
     def payee_signup_url(member_name)
-      result = get_api_call(payee_link_args(payee_id: member_name))
-      api_result(result)
+      response = get_api_call(payee_link_args(payee_id: member_name))
+      api_result(response)
     end
 
     def payee_prefilled_signup_url(member_name, attributes = {})
-      result = post_api_call(payee_prefill_args(attributes.merge(payee_id: member_name)))
-      api_result(result)
+      response = post_api_call(payee_prefill_args(attributes.merge(payee_id: member_name)))
+      xml_api_result(response)
     end
 
-    def transfer_funds(options)
-      result = get_api_call(transfer_funds_args(options))
-      api_result(result)
-    end
+    # def transfer_funds(options)
+    #   response = get_api_call(transfer_funds_args(options))
+    #   api_result(response)
+    # end
 
     private
 
-    def api_result(body)
-      if is_xml? body
-        raise PayoneerException, api_error_description(body)
+    def api_result(response)
+      if response.code == '200'
+        return response.body
       else
-        body
+        raise PayoneerException, api_error_description(response)
       end
     end
 
-    def is_xml?(body)
-      Nokogiri::XML(body).errors.empty?
+    def xml_api_result(response)
+      if response.code == '200'
+        result = Nokogiri::XML.parse(response.body)
+        token = result.css('PayoneerToken Token').first
+        return token.text if token
+      end
+      raise PayoneerException, api_error_description(response)
     end
 
-    def api_error_description(body)
-      body_hash = Hash.from_xml(body)
-      body_hash['PayoneerResponse']['Description']
+    def api_error_description(response)
+      return nil unless response and response.body
+      body_hash = Nokogiri::XML.parse(response.body)
+      if body_hash['PayoneerResponse']
+        return body_hash['PayoneerResponse']['Description']
+      else
+        return body_hash.to_s
+      end
     end
 
     def get_api_call(args_hash)
@@ -57,10 +70,9 @@ module PayoneerApi
       uri.query = URI.encode_www_form(args_hash)
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
       request = Net::HTTP::Get.new(uri.request_uri)
-      http.request(request).body
+      http.request(request)
     end
 
     def post_api_call(args_hash)
@@ -70,7 +82,7 @@ module PayoneerApi
 
       request = Net::HTTP::Post.new(uri.request_uri)
       request.set_form_data(args_hash)
-      http.request(request).body
+      http.request(request)
     end
 
     def payee_link_args(args)
@@ -111,8 +123,8 @@ module PayoneerApi
             xml.PayoutMethodList (args[:payout_methods].is_a?(Array) ?
               args[:payout_methods].join(',') :
               args[:payout_methods]) if args[:payout_methods]
-            xml.RegMode args[:registration_mode] if args[:registration_mode]
-            xml.HoldApproval args[:hold_approval] if args[:hold_approval]
+            xml.regMode args[:registration_mode] if args[:registration_mode]
+            xml.holdApproval args[:hold_approval] if args[:hold_approval]
           end
           xml.PersonalDetails do
             xml.firstName args[:first_name] if args[:first_name]
@@ -130,26 +142,26 @@ module PayoneerApi
           end
         end
       end
-      builder.to_xml
+      builder.to_xml#.tap { |x| puts x.inspect }
     end
 
-    def transfer_funds_args(options)
-      {
-        mname: 'PerformPayoutPayment',
-        p1: options[:username],
-        p2: options[:password],
-        p3: options[:partner_id],
-        p4: options[:program_id],
-        p5: options[:internal_payment_id],
-        p6: options[:internal_payee_id],
-        p7: options[:amount],
-        p8: options[:description],
-        p9: options[:date]
-      }
-    end
+    # def transfer_funds_args(options)
+    #   {
+    #     mname: 'PerformPayoutPayment',
+    #     p1: options[:username],
+    #     p2: options[:password],
+    #     p3: options[:partner_id],
+    #     p4: options[:program_id],
+    #     p5: options[:internal_payment_id],
+    #     p6: options[:internal_payee_id],
+    #     p7: options[:amount],
+    #     p8: options[:description],
+    #     p9: options[:date]
+    #   }
+    # end
 
     def api_url
-      Rails.env.production? ? PRODUCTION_API_URL : SANDBOX_API_URL
+      @environment.to_s == 'production' ? PRODUCTION_API_URL : SANDBOX_API_URL
     end
   end
 end
