@@ -10,15 +10,6 @@ module PayoneerApi
     PRODUCTION_API_URL = 'https://api.payoneer.com/payouts/HttpAPI/API.aspx?'
     API_PORT = '443'
 
-    def self.new_payee_signup_url(member_name, options = {})
-      new(options).payee_signup_url(member_name)
-    end
-
-    def self.new_payee_prefilled_signup_url(member_name, options = {})
-      attributes = options.slice!(:partner_id, :username, :password)
-      new(options).payee_prefilled_signup_url(member_name, attributes)
-    end
-
     def initialize(options = {})
       @partner_id, @username, @password = options[:partner_id], options[:username], options[:password]
       @partner_id ||= ENV['PAYONEER_PARTNER_ID']
@@ -61,10 +52,6 @@ module PayoneerApi
         p2: @password,
         p3: @partner_id,
       }
-    end
-
-    def payee_request_args(method_name, member_name)
-      request_args(method_name).merge(p4: member_name)
     end
 
     def api_url

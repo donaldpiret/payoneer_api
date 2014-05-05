@@ -4,7 +4,23 @@ require 'payoneer_api/payee'
 module PayoneerApi
   module API
     module Payees
+      extend ActiveSupport::Concern
       include PayoneerApi::Utils
+
+      module ClassMethods
+        def payee_signup_url(member_name, options = {})
+          new(options).payee_signup_url(member_name)
+        end
+
+        def payee_prefilled_signup_url(member_name, options = {})
+          attributes = options.slice!(:partner_id, :username, :password)
+          new(options).payee_prefilled_signup_url(member_name, attributes)
+        end
+
+        def payee_details(payee_id, options = {})
+          new(options).payee_details(payee_id)
+        end
+      end
 
       def payee_signup_url(payee_id, attributes = {})
         perform_with_object :get,
@@ -25,6 +41,10 @@ module PayoneerApi
       end
 
       protected
+
+      def payee_request_args(method_name, member_name)
+        request_args(method_name).merge(p4: member_name)
+      end
 
       def payee_signup_args(args)
         payee_request_args('GetToken', args[:payee_id]).merge(
