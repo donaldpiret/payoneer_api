@@ -17,4 +17,7 @@ VCR.configure do |c|
   c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
   c.hook_into :webmock
   c.configure_rspec_metadata!
+  c.filter_sensitive_data('<PAYONEER_PARTNER_ID>') { ENV['PAYONEER_PARTNER_ID'] }
+  c.filter_sensitive_data('<PAYONEER_USERNAME>') { ENV['PAYONEER_USERNAME'] }
+  c.filter_sensitive_data('<PAYONEER_PASSWORD>') { ENV['PAYONEER_PASSWORD'] }
 end

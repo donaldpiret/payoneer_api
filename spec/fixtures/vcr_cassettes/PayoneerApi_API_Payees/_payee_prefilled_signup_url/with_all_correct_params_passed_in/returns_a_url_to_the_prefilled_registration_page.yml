@@ -1,0 +1,51 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.sandbox.payoneer.com/Payouts/HttpApi/API.aspx
+    body:
+      encoding: US-ASCII
+      string: mname=GetTokenXML&p1=<PAYONEER_USERNAME>&p2=<PAYONEER_PASSWORD>&p3=<PAYONEER_PARTNER_ID>&p4=1&xml=%3C%3Fxml+version%3D%221.0%22+encoding%3D%22UTF-8%22%3F%3E%0A%3CPayoneerDetails%3E%0A++%3CDetails%3E%0A++++%3CuserName%3E<PAYONEER_USERNAME>%3C%2FuserName%3E%0A++++%3Cpassword%3E<PAYONEER_PASSWORD>%3C%2Fpassword%3E%0A++++%3Cprid%3E<PAYONEER_PARTNER_ID>%3C%2Fprid%3E%0A++++%3Capuid%3E1%3C%2Fapuid%3E%0A++++%3Credirect%3Ehttp%3A%2F%2Ftest.com%2Fredirect%3C%2Fredirect%3E%0A++++%3CredirectTime%3E10%3C%2FredirectTime%3E%0A++++%3CPayoutMethodList%3EPrepaidCard%3C%2FPayoutMethodList%3E%0A++%3C%2FDetails%3E%0A++%3CPersonalDetails%3E%0A++++%3CfirstName%3EDonald%3C%2FfirstName%3E%0A++++%3ClastName%3EPiret%3C%2FlastName%3E%0A++++%3CdateOfBirth%3E04011984%3C%2FdateOfBirth%3E%0A++++%3Caddress1%3E115+Amoy+street%3C%2Faddress1%3E%0A++++%3Ccity%3ESingapore%3C%2Fcity%3E%0A++++%3CzipCode%3E069935%3C%2FzipCode%3E%0A++++%3Cphone%3E%2B123456789%3C%2Fphone%3E%0A++++%3Cemail%3Edonald%40roomorama.com%3C%2Femail%3E%0A++%3C%2FPersonalDetails%3E%0A%3C%2FPayoneerDetails%3E%0A
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - '*/*'
+      User-Agent:
+      - Ruby
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Pragma:
+      - no-cache
+      Content-Type:
+      - text/html; charset=utf-8
+      Expires:
+      - '-1'
+      Set-Cookie:
+      - ASP.NET_SessionId=e3zhgglqxavgw5herkx1blpo; domain=.sandbox.payoneer.com;
+        path=/; secure; HttpOnly
+      - pid=<PAYONEER_PARTNER_ID>; domain=.sandbox.payoneer.com; expires=Fri, 01-May-2015 08:53:58
+        GMT; path=/; secure
+      P3p:
+      - CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"
+      X-Powered-By:
+      - ASP.NET
+      Date:
+      - Fri, 02 May 2014 08:53:58 GMT
+      Content-Length:
+      - '185'
+      Connection:
+      - Keep-Alive
+    body:
+      encoding: UTF-8
+      string: <?xml version="1.0" encoding="UTF-8"?><PayoneerToken><Token>http://payouts.sandbox.payoneer.com/partners/lp.aspx?token=b8e8eab41931475cb4b66b54996a7cb1A9A9579049</Token></PayoneerToken>
+    http_version: 
+  recorded_at: Fri, 02 May 2014 08:53:55 GMT
+recorded_with: VCR 2.9.0

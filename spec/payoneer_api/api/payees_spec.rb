@@ -65,11 +65,19 @@ describe PayoneerApi::API::Payees do
     end
   end
 
-  # describe '#payee_details', vcr: true do
-  #   it 'returns an instance of a Payee object' do
-  #     response = client.payee_details('1')
-  #     puts response.inspect
-  #     expect(response).to be_a(PayoneerApi::Payee)
-  #   end
-  # end
+  describe '#payee_details', vcr: true do
+    it 'returns an instance of a Payee object' do
+      response = client.payee_details('1')
+      expect(response).to be_a(PayoneerApi::Payee)
+    end
+
+    # Data comes from cassette
+    it 'associates basic contact data with the payee object' do
+      response = client.payee_details('1')
+      expect(response.first_name).to eq('Test')
+      expect(response.last_name).to eq('Test')
+      expect(response.email).to eq('test@roomorama.com')
+      expect(response.cards).to be_a(Hash)
+    end
+  end
 end

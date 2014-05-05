@@ -1,0 +1,49 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.sandbox.payoneer.com/Payouts/HttpApi/API.aspx?mname=GetToken&p1=<PAYONEER_USERNAME>&p10=True&p2=<PAYONEER_PASSWORD>&p3=<PAYONEER_PARTNER_ID>&p4=1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - '*/*'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store, must-revalidate
+      Pragma:
+      - no-cache
+      Content-Type:
+      - text/html; charset=utf-8
+      Expires:
+      - '-1'
+      Set-Cookie:
+      - ASP.NET_SessionId=buegcdrbhtthhpulxw0c3pcu; domain=.sandbox.payoneer.com;
+        path=/; secure; HttpOnly
+      - pid=<PAYONEER_PARTNER_ID>; domain=.sandbox.payoneer.com; expires=Fri, 01-May-2015 09:39:04
+        GMT; path=/; secure
+      P3p:
+      - CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"
+      X-Powered-By:
+      - ASP.NET
+      Date:
+      - Fri, 02 May 2014 09:39:04 GMT
+      Content-Length:
+      - '186'
+      Connection:
+      - Keep-Alive
+    body:
+      encoding: UTF-8
+      string: <?xml version="1.0" encoding="UTF-8" ?><PayoneerToken><Token>http://payouts.sandbox.payoneer.com/partners/lp.aspx?token=b8e8eab41931475cb4b66b54996a7cb1A9A9579049</Token></PayoneerToken>
+    http_version: 
+  recorded_at: Fri, 02 May 2014 09:39:01 GMT
+recorded_with: VCR 2.9.0
