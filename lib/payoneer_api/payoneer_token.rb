@@ -10,5 +10,9 @@ module PayoneerApi
     def uri
       URI.parse(token)
     end
+
+    def to_s
+      uri.to_s
+    end
   end
 end

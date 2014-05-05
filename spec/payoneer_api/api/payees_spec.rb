@@ -4,9 +4,18 @@ describe PayoneerApi::API::Payees do
   let(:client) { PayoneerApi::Client.new }
 
   describe '#payee_signup_url', vcr: true do
-    it 'returns a url to the registration page' do
+    it 'returns payoneer token' do
       response = client.payee_signup_url('1')
       expect(response).to be_a(PayoneerApi::PayoneerToken)
+    end
+
+    it 'allows you to us the to_s method on that object to obtain the registration url' do
+      response = client.payee_signup_url('1')
+      expect(response.to_s).to match(/payouts\.sandbox\.payoneer\.com/)
+    end
+
+    it 'allows you to use the uri method to get the URI object directly' do
+      response = client.payee_signup_url('1')
       expect(response.uri.host).to eq('payouts.sandbox.payoneer.com')
     end
   end
